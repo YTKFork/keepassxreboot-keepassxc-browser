@@ -10,7 +10,7 @@ HTMLElement.prototype.hide = function() {
     this.style.display = 'none';
 };
 
-function statusResponse(r) {
+async function statusResponse(r) {
     $('#initial-state').hide();
     $('#error-encountered').hide();
     $('#need-reconfigure').hide();
@@ -20,6 +20,7 @@ function statusResponse(r) {
     $('#lock-database-button').hide();
     $('#getting-started-guide').hide();
     $('#database-not-opened').hide();
+    $('#add-credentials-button').hide();
 
     if (!r.keePassXCAvailable) {
         $('#error-message').textContent = r.error;
@@ -52,6 +53,7 @@ function statusResponse(r) {
         $('#configured-and-associated').show();
         $('#associated-identifier').textContent = r.identifier;
         $('#lock-database-button').show();
+        $('#add-credentials-button').show();
 
         if (r.usernameFieldDetected) {
             $('#username-field-detected').show();
@@ -157,6 +159,10 @@ const sendMessageToTab = async function(message) {
         await browser.runtime.sendMessage({
             action: 'hide_troubleshooting_guide_alert'
         });
+    });
+
+    $('#add-credentials-cancel-button').addEventListener('click', async () => {
+        $('#add-credentials').hide();
     });
 
     statusResponse(await browser.runtime.sendMessage({
